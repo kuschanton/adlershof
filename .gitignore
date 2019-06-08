@@ -1,6 +1,9 @@
 /*
 !.idea
-.gitignore
+!.gitignore
+!application-feeder
+!client
+!domain
 !build.gradle.kts
 !gradle.properties
 !settings.gradle.kts
