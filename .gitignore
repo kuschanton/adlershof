@@ -1,6 +1,7 @@
 /*
 !.idea
 !.gitignore
+!README.md
 !application-feeder
 !client
 !domain
