@@ -19,27 +19,26 @@
 //    }
 //}
 //
-//gradle.allprojects {
-//    configurations.all {
-//        resolutionStrategy {
+gradle.allprojects {
+    configurations.all {
+        resolutionStrategy {
 //            force("org.springframework.boot:spring-boot-configuration-processor:2.1.3.RELEASE")
 //            force("org.springframework.boot:spring-boot-starter-log4j:1.3.8.RELEASE")
-//
-//            eachDependency {
-//                when(requested.name) {
-//                    "jackson-module-kotlin" -> useVersion("2.9.9")
-//                }
-//            }
-//        }
-//    }
-//}
+
+            eachDependency {
+                when(requested.group) {
+                    "io.arrow-kt" -> useVersion("0.9.0")
+                }
+            }
+        }
+    }
+}
 
 rootProject.name = "adlershof"
 
 include(
     ":application-feeder",
     ":domain",
-    ":service",
     ":tankerkoenig-client"
 )
 

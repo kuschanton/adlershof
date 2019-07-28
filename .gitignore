@@ -4,7 +4,6 @@
 !application-feeder
 !client
 !domain
-!service
 !build.gradle.kts
 !gradle.properties
 !settings.gradle.kts

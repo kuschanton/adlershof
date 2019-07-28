@@ -1,3 +1,3 @@
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.arrow-kt:arrow-core-data")
 }
