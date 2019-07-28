@@ -10,6 +10,6 @@ dependencies {
 }
 
 tasks.withType<BootJar> {
-//    archiveBaseName.set("adlershof-feeder")
-//    archiveClassifier.set("exec")
+    archiveBaseName.set("adlershof-feeder")
+    archiveClassifier.set("exec")
 }

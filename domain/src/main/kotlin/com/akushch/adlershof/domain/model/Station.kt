@@ -1,4 +1,4 @@
-package com.akushch.adlershof.domain
+package com.akushch.adlershof.domain.model
 
 import java.util.UUID
 
