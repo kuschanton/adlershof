@@ -13,6 +13,7 @@ interface ValidateSubscriptionCreateService {
 
     fun SubscriptionCreation.validate(user: User): IO<Either<SubscriptionCreateError, ValidSubscriptionCreation>> {
         return fx {
+            // TODO: Add validation for radius and if within service area
             if (existsByName(name, user).bind()) {
                 SubscriptionCreateError.NameAlreadyExists.left()
             } else {

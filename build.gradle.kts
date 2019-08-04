@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.21"
@@ -22,6 +23,30 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf(
+                "-Xjsr305=strict",
+                "-XXLanguage:+InlineClasses"
+            )
+        }
+    }
+
+    dependencies {
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:2.1.6.RELEASE"))
+
+        // Arrow
+        implementation("io.arrow-kt:arrow-core-data")
+        implementation("io.arrow-kt:arrow-effects-data")
+        implementation("io.arrow-kt:arrow-effects-io-extensions")
+        implementation("io.arrow-kt:arrow-extras-extensions")
+        implementation("io.arrow-kt:arrow-effects-reactor-extensions")
+
+        // Kotlin
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-RC")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.0-RC")
 
 //    kapt {
 //        correctErrorTypes = true
@@ -62,4 +87,5 @@ allprojects {
 //    }
 
 //    sourceSets["main"].java.srcDir("$buildDir/tmp/kapt3/calsses/main")
+    }
 }

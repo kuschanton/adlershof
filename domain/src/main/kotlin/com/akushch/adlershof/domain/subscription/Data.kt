@@ -22,6 +22,10 @@ data class SubscriptionCreation(
     val name: String
 )
 
+data class SubscriptionDeletion(
+    val id: UUID
+)
+
 data class ValidSubscriptionCreation(
     val id: UUID,
     val area: Area,

@@ -1,0 +1,16 @@
+tankerkoenig:
+  api:
+    url: https://creativecommons.tankerkoenig.de
+    api-key: ***REMOVED***
+    timeout: 30s
+    retry-attempts: 3
+
+scheduler:
+  initial-delay: 10s
+  delay: 10m
+
+coroutines:
+  dispathcer:
+    threads: 4
+
+
