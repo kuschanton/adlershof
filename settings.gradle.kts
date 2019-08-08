@@ -39,8 +39,8 @@ rootProject.name = "adlershof"
 include(
     ":application-feeder",
     ":domain",
-    ":tankerkoenig-client"
+    ":persistence"
 )
 
-project(":tankerkoenig-client").projectDir =
-    file("client/tankerkoenig-client")
+//project(":tankerkoenig-client").projectDir =
+//    file("client/tankerkoenig-client")

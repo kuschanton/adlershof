@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.3.21"
     kotlin("plugin.spring") version "1.3.21"
-//    id("org.springframework.boot")
+//    id("org.springframework.boot") version "2.1.6.RELEASE"
 //    id("io.spring.dependency-management") version "1.0.7.RELEASE"
 ////    id("org.owasp.dependencycheck")
 //    id("org.jmailen.kotlinter") version "1.22.0"
@@ -16,12 +16,15 @@ allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-kapt")
     apply(plugin = "kotlin-spring")
+//    apply(plugin = "org.springframework.boot")   // ???
+//    apply(plugin = "org.flywaydb.flyway")        // ???
 
 //    apply(plugin = "org.owasp.dependencycheck")
 //    apply(plugin = "org.jmailen.kotlinter")
 
     repositories {
         mavenCentral()
+        maven(url = "http://repo.spring.io/milestone")
     }
 
     tasks.withType<KotlinCompile> {
@@ -36,6 +39,7 @@ allprojects {
 
     dependencies {
         implementation(platform("org.springframework.boot:spring-boot-dependencies:2.1.6.RELEASE"))
+        implementation("org.springframework.boot:spring-boot-configuration-processor")
 
         // Arrow
         implementation("io.arrow-kt:arrow-core-data")

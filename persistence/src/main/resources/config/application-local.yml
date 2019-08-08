@@ -1,8 +1,3 @@
-area:
-  lat: 52.52099975265203
-  lon: 13.43803882598877
-  radius: 2
-
 spring:
   data:
     postgres:

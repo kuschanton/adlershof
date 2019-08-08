@@ -13,4 +13,17 @@ coroutines:
   dispathcer:
     threads: 4
 
+area:
+  lat: ~ # profile override
+  lon: ~ # profile override
+  radius: ~ # profile override
+
+spring:
+  data:
+    postgres:
+      host: ~ # profile override
+      port: ~ # profile override
+      database: ~ # profile override
+      username: ~ # profile override
+      password: ~ # profile override
 

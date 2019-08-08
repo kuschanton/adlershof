@@ -3,8 +3,8 @@
 !.gitignore
 !README.md
 !application-feeder
-!client
 !domain
+!persistence
 !build.gradle.kts
 !gradle.properties
 !settings.gradle.kts

@@ -18,5 +18,4 @@ class CoroutinesProperties {
         @Max(20)
         var threads: Int = 4
     }
-
 }
