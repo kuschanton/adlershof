@@ -4,10 +4,10 @@ import com.akushch.adlershof.domain.subscription.Area
 import java.time.Instant
 import java.util.UUID
 
-inline class StationId(val value: UUID)
+class StationId(val value: UUID)
 fun UUID.stationId() = StationId(this)
 
-inline class StationExternalId(val value: UUID)
+class StationExternalId(val value: UUID)
 fun UUID.stationExternalId() = StationExternalId(this)
 
 data class Station(

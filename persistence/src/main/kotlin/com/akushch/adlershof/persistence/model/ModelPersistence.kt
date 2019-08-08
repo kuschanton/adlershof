@@ -17,7 +17,7 @@ enum class FuelTypeP {
     E5, E10, DIESEL
 }
 
-data class Station(
+data class StationP(
     val id: UUID,
     val externalId: UUID,
     val name: String,

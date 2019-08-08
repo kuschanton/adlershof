@@ -23,15 +23,12 @@ import com.akushch.adlershof.domain.station.UpsertStationUseCase
 import com.akushch.adlershof.domain.station.stationExternalId
 import com.akushch.adlershof.domain.station.stationId
 import com.akushch.adlershof.feeder.model.Station
-import com.akushch.adlershof.persistence.config.DatabaseConfiguration
-import com.akushch.adlershof.persistence.repository.PriceRepository
 import java.time.Instant
 import java.util.UUID
 
 @Component
 class FeederService(
     val tankerkoenigClient: TankerkoenigClient,
-    val priceRepository: DatabaseConfiguration,
     coroutinesProperties: CoroutinesProperties,
     areaProperties: AreaProperties
 ) {

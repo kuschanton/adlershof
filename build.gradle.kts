@@ -31,15 +31,14 @@ allprojects {
         kotlinOptions {
             jvmTarget = "1.8"
             freeCompilerArgs = listOf(
-                "-Xjsr305=strict",
-                "-XXLanguage:+InlineClasses"
+                "-Xjsr305=strict"
             )
         }
     }
 
     dependencies {
         implementation(platform("org.springframework.boot:spring-boot-dependencies:2.1.6.RELEASE"))
-        implementation("org.springframework.boot:spring-boot-configuration-processor")
+//        implementation("org.springframework.boot:spring-boot-configuration-processor")
 
         // Arrow
         implementation("io.arrow-kt:arrow-core-data")
