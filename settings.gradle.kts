@@ -38,6 +38,7 @@ rootProject.name = "adlershof"
 
 include(
     ":application-feeder",
+    ":common",
     ":domain",
     ":persistence"
 )

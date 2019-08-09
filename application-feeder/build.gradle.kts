@@ -1,11 +1,11 @@
-//import org.springframework.boot.gradle.tasks.bundling.BootJar
-//
+
 plugins {
-    id("org.springframework.boot") version "2.1.6.RELEASE" // ??
+    id("org.springframework.boot") version "2.1.6.RELEASE"
     id("org.flywaydb.flyway") version "5.2.4"
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":domain"))
     implementation(project(":persistence"))
 

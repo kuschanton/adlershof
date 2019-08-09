@@ -1,5 +1,7 @@
 package com.akushch.adlershof.domain.subscription
 
+import com.akushch.adlershof.domain.station.Latitude
+import com.akushch.adlershof.domain.station.Longitude
 import java.util.UUID
 
 data class Subscription(
@@ -12,8 +14,8 @@ data class Subscription(
 )
 
 data class Area(
-    val lat: Double,
-    val lon: Double,
+    val lon: Longitude,
+    val lat: Latitude,
     val radius: Int
 )
 

@@ -1,12 +1,11 @@
 package com.akushch.adlershof.feeder.service
 
 import arrow.core.Option
-import arrow.effects.IO
 import arrow.effects.extensions.io.fx.fx
 import com.akushch.adlershof.feeder.client.TankerkoenigClient
 import com.akushch.adlershof.feeder.config.AreaProperties
 import com.akushch.adlershof.feeder.config.CoroutinesProperties
-import com.akushch.adlershof.feeder.model.Area
+import com.akushch.adlershof.feeder.model.AreaApi
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -22,7 +21,9 @@ import com.akushch.adlershof.domain.station.UpsertStationCommand
 import com.akushch.adlershof.domain.station.UpsertStationUseCase
 import com.akushch.adlershof.domain.station.stationExternalId
 import com.akushch.adlershof.domain.station.stationId
-import com.akushch.adlershof.feeder.model.Station
+import com.akushch.adlershof.domain.station.toLatitude
+import com.akushch.adlershof.domain.station.toLongitude
+import com.akushch.adlershof.feeder.model.StationApi
 import java.time.Instant
 import java.util.UUID
 
@@ -50,7 +51,7 @@ class FeederService(
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 //        override val upsertStation: UpsertStation
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        override val addPriceToStationHistory: AddPriceToStationHistory = { x, y -> fx { logger.info("Added price $y to station $x"); y }}
+        override val addPriceToStationHistory: AddPriceToStationHistory = { x -> fx { logger.info("Added price $x"); x }}
         override val getByExternalId: GetByExternalId = { x -> fx { logger.info("Get by external id $x"); Option.empty<com.akushch.adlershof.domain.station.Station>() }}
         override val upsertStation: UpsertStation = { x -> fx { logger.info("Upsert station $x"); com.akushch.adlershof.domain.station.Station(
             id = UUID.randomUUID().stationId(),
@@ -75,20 +76,17 @@ class FeederService(
             }
         }
 
-    private fun List<Station>.toUpsertCommands(): List<UpsertStationCommand> {
+    private fun List<StationApi>.toUpsertCommands(): List<UpsertStationCommand> {
         val updateId = System.currentTimeMillis()
         val updateTimestamp = Instant.now()
         return this.map { it.toUpsertStationCommand(updateId, updateTimestamp) }
     }
 
-    private fun getStations() = fx {
-        !effect {
-            tankerkoenigClient.getStationsInArea(area).stations
-        }
-    }
+    private fun getStations() =
+            tankerkoenigClient.getStationsInArea(area).map { it.stations }
 
-    private fun AreaProperties.toArea() = Area(lat, lon, radius)
-    private fun Station.toUpsertStationCommand(
+    private fun AreaProperties.toArea() = AreaApi(lon.toLongitude(), lat.toLatitude(), radius)
+    private fun StationApi.toUpsertStationCommand(
         updateId: Long,
         updateTimestamp: Instant
     ) = UpsertStationCommand(
@@ -98,8 +96,8 @@ class FeederService(
             brand = brand,
             updateId = updateId,
             houseNumber = houseNumber,
-            lat = lat,
-            lon = lng,
+            lon = lng.toLongitude(),
+            lat = lat.toLatitude(),
             place = place,
             postCode = postCode,
             priceDiesel = diesel,

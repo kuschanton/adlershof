@@ -1,8 +1,16 @@
 package com.akushch.adlershof.feeder.model
 
 import java.util.UUID
+import com.akushch.adlershof.domain.station.Latitude
+import com.akushch.adlershof.domain.station.Longitude
 
-data class Station (
+data class AreaApi(
+    val lon: Longitude,
+    val lat: Latitude,
+    val radius: Int
+)
+
+data class StationApi (
     val id : UUID,
     val name : String,
     val brand : String,
@@ -17,4 +25,12 @@ data class Station (
     val isOpen : Boolean,
     val houseNumber : String,
     val postCode : Int
+)
+
+class TankerkoenigResponse(
+    val ok: Boolean,
+    val license: String,
+    val data: String,
+    val status: String,
+    val stations: List<StationApi>
 )

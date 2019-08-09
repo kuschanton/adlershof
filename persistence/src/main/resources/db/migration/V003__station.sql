@@ -2,13 +2,13 @@ CREATE TABLE station (
     id UUID PRIMARY KEY,
     created TIMESTAMPTZ NOT NULL,
     updated TIMESTAMPTZ NOT NULL,
-    externalId UUID UNIQUE NOT NULL,
+    external_id UUID UNIQUE NOT NULL,
     name VARCHAR(200) NOT NULL,
     brand VARCHAR(200) NOT NULL,
     place VARCHAR(200) NOT NULL,
     street VARCHAR(200) NOT NULL,
     coordinate POINT NOT NULL,
-    houseNumber VARCHAR(200) NOT NULL,
+    house_number VARCHAR(200) NOT NULL,
     postCode INT NOT NULL
 );
 

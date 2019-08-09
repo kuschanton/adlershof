@@ -18,9 +18,9 @@ interface UpsertStationUseCase {
                 { it }
             )
             .also { station ->
-                addPriceToStationHistory(station.id, data.dieselPrice()).bind()
-                addPriceToStationHistory(station.id, data.e10Price()).bind()
-                addPriceToStationHistory(station.id, data.e5Price()).bind()
+                addPriceToStationHistory(data.dieselPrice(station.id)).bind()
+                addPriceToStationHistory(data.e10Price(station.id)).bind()
+                addPriceToStationHistory(data.e5Price(station.id)).bind()
             }
     }
 }

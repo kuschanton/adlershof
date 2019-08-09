@@ -4,10 +4,10 @@ import com.akushch.adlershof.domain.subscription.Area
 import java.time.Instant
 import java.util.UUID
 
-class StationId(val value: UUID)
+data class StationId(val value: UUID)
 fun UUID.stationId() = StationId(this)
 
-class StationExternalId(val value: UUID)
+data class StationExternalId(val value: UUID)
 fun UUID.stationExternalId() = StationExternalId(this)
 
 data class Station(
@@ -17,8 +17,8 @@ data class Station(
     val brand: String,
     val place: String,
     val street: String,
-    val lat: Double,
-    val lon: Double,
+    val lon: Longitude,
+    val lat: Latitude,
     val houseNumber: String,
     val postCode: Int
 ) {
@@ -31,8 +31,8 @@ data class StationUpsert(
     val brand: String,
     val place: String,
     val street: String,
-    val lat: Double,
-    val lon: Double,
+    val lon: Longitude,
+    val lat: Latitude,
     val houseNumber: String,
     val postCode: Int,
     val priceE10: Double,
@@ -42,21 +42,36 @@ data class StationUpsert(
     val updateTimestamp: Instant
 )
 
-fun StationUpsert.dieselPrice() = Price(
+/**
+ * X coordinate
+ */
+data class Longitude(val value: Double)
+fun Double.toLongitude() = Longitude(this)
+
+/**
+ * X coordinate
+ */
+data class Latitude(val value: Double)
+fun Double.toLatitude() = Latitude(this)
+
+fun StationUpsert.dieselPrice(stationId: StationId) = Price(
+    stationId,
     updateId,
     updateTimestamp,
     FuelType.DIESEL,
     priceDiesel
 )
 
-fun StationUpsert.e10Price() = Price(
+fun StationUpsert.e10Price(stationId: StationId) = Price(
+    stationId,
     updateId,
     updateTimestamp,
     FuelType.E10,
     priceE10
 )
 
-fun StationUpsert.e5Price() = Price(
+fun StationUpsert.e5Price(stationId: StationId) = Price(
+    stationId,
     updateId,
     updateTimestamp,
     FuelType.E5,
@@ -68,6 +83,7 @@ data class StationsInAreaGet(
 )
 
 data class Price(
+    val stationId: StationId,
     val updateId: Long,
     val updateTimestamp: Instant,
     val fuelType: FuelType,

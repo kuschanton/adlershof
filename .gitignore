@@ -5,6 +5,7 @@
 !gradlew.bat
 !README.md
 !application-feeder
+!common
 !domain
 !persistence
 !build.gradle.kts
