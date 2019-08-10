@@ -20,7 +20,7 @@ dependencies {
 
     implementation("org.springframework.data:spring-data-r2dbc:1.0.0.M1")
     implementation("io.r2dbc:r2dbc-postgresql:1.0.0.M7")
-    implementation("org.flywaydb:flyway-core:3.0")
+    implementation("org.flywaydb:flyway-core:5.2.4")
     implementation("org.postgresql:postgresql:42.2.5")
 
     implementation("io.projectreactor:reactor-core:3.2.11.RELEASE")

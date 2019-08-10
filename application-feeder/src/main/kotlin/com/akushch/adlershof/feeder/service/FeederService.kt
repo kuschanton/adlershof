@@ -24,12 +24,14 @@ import com.akushch.adlershof.domain.station.stationId
 import com.akushch.adlershof.domain.station.toLatitude
 import com.akushch.adlershof.domain.station.toLongitude
 import com.akushch.adlershof.feeder.model.StationApi
+import com.akushch.adlershof.persistence.facade.PriceRepositoryFacade
 import java.time.Instant
 import java.util.UUID
 
 @Component
 class FeederService(
-    val tankerkoenigClient: TankerkoenigClient,
+    private val tankerkoenigClient: TankerkoenigClient,
+    private val priceRepositoryFacade: PriceRepositoryFacade,
     coroutinesProperties: CoroutinesProperties,
     areaProperties: AreaProperties
 ) {
@@ -51,7 +53,7 @@ class FeederService(
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 //        override val upsertStation: UpsertStation
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        override val addPriceToStationHistory: AddPriceToStationHistory = { x -> fx { logger.info("Added price $x"); x }}
+        override val addPriceToStationHistory: AddPriceToStationHistory = priceRepositoryFacade::addPriceToStation
         override val getByExternalId: GetByExternalId = { x -> fx { logger.info("Get by external id $x"); Option.empty<com.akushch.adlershof.domain.station.Station>() }}
         override val upsertStation: UpsertStation = { x -> fx { logger.info("Upsert station $x"); com.akushch.adlershof.domain.station.Station(
             id = UUID.randomUUID().stationId(),
@@ -77,7 +79,7 @@ class FeederService(
         }
 
     private fun List<StationApi>.toUpsertCommands(): List<UpsertStationCommand> {
-        val updateId = System.currentTimeMillis()
+        val updateId = System.currentTimeMillis() / 1000
         val updateTimestamp = Instant.now()
         return this.map { it.toUpsertStationCommand(updateId, updateTimestamp) }
     }

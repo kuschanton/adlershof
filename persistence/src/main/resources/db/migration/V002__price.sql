@@ -7,10 +7,20 @@ CREATE TABLE price (
     station_id UUID NOT NULL,
     update_id INTEGER NOT NULL,
     update_timestamp TIMESTAMPTZ NOT NULL,
-    fuel_type FUEL_TYPE NOT NULL,
+    fuel_type VARCHAR(10) NOT NULL,
     price INTEGER NOT NULL,
-    UNIQUE(station_id, update_id)
+    UNIQUE(station_id, update_id, fuel_type)
 );
+
+
+CREATE INDEX idx_station_id
+    ON price(station_id);
+CREATE INDEX idx_update_id
+    ON price(update_id);
+CREATE INDEX idx_update_timestamp
+    ON price(update_timestamp);
+CREATE INDEX idx_fuel_type
+    ON price(fuel_type);
 
 -- triggers
 CREATE TRIGGER price_set_created_updated_dates

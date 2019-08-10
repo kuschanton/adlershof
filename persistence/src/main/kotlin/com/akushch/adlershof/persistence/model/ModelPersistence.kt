@@ -9,9 +9,11 @@ import com.akushch.adlershof.domain.station.toLatitude
 import com.akushch.adlershof.domain.station.toLongitude
 import org.postgresql.geometric.PGpoint
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 import java.util.UUID
 
+@Table("price")
 data class PriceP(
     val stationId: UUID,
     val updateId: Long,

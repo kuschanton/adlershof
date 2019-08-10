@@ -10,8 +10,8 @@ import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
 
 @Configuration
-@EnableR2dbcRepositories
-@ComponentScan("com.akushch.adlershof.persistence.repository")
+@EnableR2dbcRepositories("com.akushch.adlershof.persistence.repository")
+@ComponentScan("com.akushch.adlershof.persistence.facade")
 @EnableConfigurationProperties(DatabaseProperties::class)
 class DatabaseConfiguration(
     val databaseProperties: DatabaseProperties
