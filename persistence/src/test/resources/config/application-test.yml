@@ -1,0 +1,14 @@
+spring:
+  data:
+    postgres:
+      host: localhost
+      port: 5432
+      database: adlershof
+      username: adlershof
+      password: secret
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/adlershof
+    username: adlershof
+    password: secret

@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.21"
-    kotlin("plugin.spring") version "1.3.21"
+    kotlin("jvm") version "1.3.41"
+    kotlin("plugin.spring") version "1.3.41"
 //    id("org.springframework.boot") version "2.1.6.RELEASE"
 //    id("io.spring.dependency-management") version "1.0.7.RELEASE"
 ////    id("org.owasp.dependencycheck")
@@ -38,7 +38,7 @@ allprojects {
 
     dependencies {
         implementation(platform("org.springframework.boot:spring-boot-dependencies:2.1.6.RELEASE"))
-//        implementation("org.springframework.boot:spring-boot-configuration-processor")
+        implementation("org.springframework.boot:spring-boot-starter-validation")
 
         // Arrow
         implementation("io.arrow-kt:arrow-core-data")
@@ -48,8 +48,13 @@ allprojects {
         implementation("io.arrow-kt:arrow-effects-reactor-extensions")
 
         // Kotlin
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.41")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.0-RC")
+
+        // Test
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")
 
 //    kapt {
 //        correctErrorTypes = true

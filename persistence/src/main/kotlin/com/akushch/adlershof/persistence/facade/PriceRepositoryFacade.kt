@@ -12,18 +12,17 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class PriceRepositoryFacade(
-    val priceRepository: PriceRepository,
-    val stationRepository: StationRepository
+    private val priceRepository: PriceRepository
 ) {
-    fun addPriceToStation(price: Price) =
+    fun insertPrice(price: Price) =
         price.let { it.toPriceP() }
             .let { priceRepository.save(it) }
             .map { it.toPrice() }
             .toIO()
 
-    fun getByExternalId(stationExternalId: StationExternalId) =
-        stationRepository.findByExternalId(stationExternalId.value)
-            .map { it.toStation() }
-            .toIO()
+//    fun getByExternalId(stationExternalId: StationExternalId) =
+//        stationRepository.findByExternalId(stationExternalId.value)
+//            .map { it.toStation() }
+//            .toIO()
 
 }

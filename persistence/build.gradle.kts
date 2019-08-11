@@ -26,7 +26,7 @@ dependencies {
     implementation("io.projectreactor:reactor-core:3.2.11.RELEASE")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("javax.validation:validation-api:2.0.1.Final")
 
     testCompile("org.testcontainers:junit-jupiter:1.11.3")
+    testCompile("org.springframework.boot:spring-boot-starter-jdbc")
 }

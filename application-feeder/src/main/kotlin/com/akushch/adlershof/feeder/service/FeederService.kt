@@ -53,7 +53,7 @@ class FeederService(
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 //        override val upsertStation: UpsertStation
 //            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        override val addPriceToStationHistory: AddPriceToStationHistory = priceRepositoryFacade::addPriceToStation
+        override val addPriceToStationHistory: AddPriceToStationHistory = priceRepositoryFacade::insertPrice
         override val getByExternalId: GetByExternalId = { x -> fx { logger.info("Get by external id $x"); Option.empty<com.akushch.adlershof.domain.station.Station>() }}
         override val upsertStation: UpsertStation = { x -> fx { logger.info("Upsert station $x"); com.akushch.adlershof.domain.station.Station(
             id = UUID.randomUUID().stationId(),
