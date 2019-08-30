@@ -1,21 +1,17 @@
 package com.akushch.adlershof.feeder.scheduler
 
-import arrow.effects.extensions.eithert.async.delay
-import com.akushch.adlershof.feeder.client.TankerkoenigClient
+import arrow.core.Either
+import com.akushch.adlershof.domain.station.Station
 import com.akushch.adlershof.feeder.config.SchedulerProperties
 import com.akushch.adlershof.feeder.service.FeederService
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.util.concurrent.Executors
 import javax.annotation.PostConstruct
 import kotlin.coroutines.CoroutineContext
 
@@ -33,14 +29,28 @@ class FeederJob(
     fun initFeederJob() {
         logger.info("Initializing feeder job")
         scheduleAtFixedRate(schedulerProperties.delay, schedulerProperties.initialDelay) {
-            // TODO: Make sure if one fails other get updated
             feederService.updateStations()
                 .unsafeRunAsync { result ->
                     result.fold(
                         { logger.error("Update failed", it) },
-                        { logger.info("Update executed successfully, number of stations ${it.size}") }
+                        { logResult(it) }
                     )
                 }
+        }
+    }
+
+    private fun logResult(results: List<Either<Throwable, Station>>) {
+        val errors = results
+            .filter { it.isLeft() }
+            .map { it as Either.Left }
+            .map { it.a }
+        if (errors.isEmpty()) {
+            logger.info("Update executed successfully, number of stations ${results.size}")
+        } else {
+            logger.info("Update executed with errors, total: ${results.size} errors: ${errors.size}")
+            errors.forEach {
+                logger.error("Update for a station failed", it)
+            }
         }
     }
 

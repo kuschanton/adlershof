@@ -48,26 +48,32 @@ class FeederService(
 
     private val useCase = object : UpsertStationUseCase {
         override val addPriceToStationHistory: AddPriceToStationHistory = priceRepositoryFacade::insertPrice
-        override val getByExternalId: GetByExternalId = { x -> fx { logger.info("Get by external id $x"); Option.empty<com.akushch.adlershof.domain.station.Station>() }}
-        override val upsertStation: UpsertStation = { x -> fx { logger.info("Upsert station $x"); com.akushch.adlershof.domain.station.Station(
-            id = UUID.randomUUID().stationId(),
-            street = x.street,
-            postCode = x.postCode,
-            place = x.place,
-            lat = x.lat,
-            lon = x.lon,
-            houseNumber = x.houseNumber,
-            externalId = x.externalId,
-            brand = x.brand,
-            name = x.name
-        ) }}
+        override val getByExternalId: GetByExternalId =
+            { x -> fx { logger.info("Get by external id $x"); Option.empty<com.akushch.adlershof.domain.station.Station>() } }
+        override val upsertStation: UpsertStation = { x ->
+            fx {
+                logger.info("Upsert station $x");
+                com.akushch.adlershof.domain.station.Station(
+                    id = UUID.randomUUID().stationId(),
+                    street = x.street,
+                    postCode = x.postCode,
+                    place = x.place,
+                    lat = x.lat,
+                    lon = x.lon,
+                    houseNumber = x.houseNumber,
+                    externalId = x.externalId,
+                    brand = x.brand,
+                    name = x.name
+                )
+            }
+        }
     }
 
     fun updateStations() =
         fx {
             val commands = getStations().bind().toUpsertCommands()
             useCase.run {
-                val effects = commands.map { it.runUseCase() }
+                val effects = commands.map { it.runUseCase().attempt() }
                 coroutineContext.parSequence(effects).bind()
             }
         }
@@ -79,7 +85,7 @@ class FeederService(
     }
 
     private fun getStations() =
-            tankerkoenigClient.getStationsInArea(area).map { it.stations }
+        tankerkoenigClient.getStationsInArea(area).map { it.stations }
 
     private fun AreaProperties.toArea() = AreaApi(lon.toLongitude(), lat.toLatitude(), radius)
     private fun StationApi.toUpsertStationCommand(
