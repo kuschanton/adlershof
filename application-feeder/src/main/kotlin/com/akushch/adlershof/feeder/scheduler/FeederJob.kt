@@ -33,6 +33,7 @@ class FeederJob(
     fun initFeederJob() {
         logger.info("Initializing feeder job")
         scheduleAtFixedRate(schedulerProperties.delay, schedulerProperties.initialDelay) {
+            // TODO: Make sure if one fails other get updated
             feederService.updateStations()
                 .unsafeRunAsync { result ->
                     result.fold(
