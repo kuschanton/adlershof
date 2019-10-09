@@ -1,35 +1,40 @@
 package com.akushch.adlershof.domain.station
 
-import arrow.effects.IO
 import arrow.effects.extensions.io.fx.fx
+import com.akushch.adlershof.common.getOrElse
 
 data class UpsertStationCommand(val data: StationUpsert)
-data class GetStationsInAreaCommand(val data: StationsInAreaGet)
+data class InsertPriceCommand(val data: PriceInsert)
+//data class GetStationsInAreaCommand(val data: StationsInAreaGet)
+
+sealed class PriceInsertError {
+    data class StationByExternalIdNotFound(val externalId: StationExternalId) : PriceInsertError()
+}
 
 interface UpsertStationUseCase {
     val upsertStation: UpsertStation
-    val getByExternalId: GetByExternalId
-    val addPriceToStationHistory: AddPriceToStationHistory
+    val findByExternalId: FindByExternalId
 
     fun UpsertStationCommand.runUseCase() = fx {
-        getByExternalId(data.externalId).bind()
-            .fold(
-                { upsertStation(data).bind() },
-                { it }
-            )
-            .also { station ->
-                addPriceToStationHistory(data.dieselPrice(station.id)).bind()
-                addPriceToStationHistory(data.e10Price(station.id)).bind()
-                addPriceToStationHistory(data.e5Price(station.id)).bind()
-            }
+        findByExternalId(data.externalId).bind()
+            .getOrElse { upsertStation(data).bind() }
     }
 }
 
-interface GetStationsInAreaUseCase {
-    val getStationsInArea: GetStationsInArea
+interface InsertPriceUseCase {
+    val validateInsert: ValidatePriceInsert
+    val insertPrice: InsertPrice
 
-    fun GetStationsInAreaCommand.runUseCase(): IO<List<Station>> = getStationsInArea(data.area)
+    fun InsertPriceCommand.runUseCase() = fx {
+        validateInsert(data).bind()
+            .map { insertPrice(it).bind() }
+    }
 }
+
+//interface GetStationsInAreaUseCase {
+//    val getStationsInArea: GetStationsInArea
+//    fun GetStationsInAreaCommand.runUseCase(): IO<List<Station>> = getStationsInArea(data.area)
+//}
 
 
 

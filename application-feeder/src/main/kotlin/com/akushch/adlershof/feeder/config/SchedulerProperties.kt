@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.validation.annotation.Validated
 import java.time.Duration
-import javax.validation.constraints.Positive
 
 @Component
 @Validated
@@ -13,9 +12,9 @@ import javax.validation.constraints.Positive
 class SchedulerProperties {
 
     @NotNull
-//    @Positive
+    // TODO: @Positive
     lateinit var initialDelay: Duration
 
-//    @Positive
+    // TODO: @Positive
     lateinit var delay: Duration
 }

@@ -1,1 +1,4 @@
 
+dependencies {
+    implementation(project(":common"))
+}

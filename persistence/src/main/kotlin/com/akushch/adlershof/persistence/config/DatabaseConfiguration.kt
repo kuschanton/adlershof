@@ -1,7 +1,7 @@
 package com.akushch.adlershof.persistence.config
 
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
-import io.r2dbc.postgresql.PostgresqlConnectionFactory
+import io.r2dbc.postgresql.PostgresqlConnectionFactoryOverride
 import io.r2dbc.spi.ConnectionFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
@@ -18,7 +18,7 @@ class DatabaseConfiguration(
 ) : AbstractR2dbcConfiguration() {
     override fun connectionFactory(): ConnectionFactory {
         return with(databaseProperties) {
-            PostgresqlConnectionFactory(
+            PostgresqlConnectionFactoryOverride(
                 PostgresqlConnectionConfiguration.builder()
                     .host(host)
                     .port(port)

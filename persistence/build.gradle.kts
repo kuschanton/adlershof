@@ -31,5 +31,5 @@ dependencies {
     testCompile("com.github.database-rider:rider-junit5:1.7.2")
 
     // Only to run migration because r2dbc does not work with flyway yet
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    testCompile("org.springframework.boot:spring-boot-starter-jdbc")
 }

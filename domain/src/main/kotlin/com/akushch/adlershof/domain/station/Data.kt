@@ -21,9 +21,16 @@ data class Station(
     val lat: Latitude,
     val houseNumber: String,
     val postCode: Int
-) {
-    companion object
-}
+)
+
+data class Price(
+    val stationId: StationId,
+    val updateId: Long,
+    val updateTimestamp: Instant,
+    val diesel: Double,
+    val e5: Double,
+    val e10: Double
+)
 
 data class StationUpsert(
     val externalId: StationExternalId,
@@ -34,12 +41,25 @@ data class StationUpsert(
     val lon: Longitude,
     val lat: Latitude,
     val houseNumber: String,
-    val postCode: Int,
-    val priceE10: Double,
-    val priceE5: Double,
-    val priceDiesel: Double,
+    val postCode: Int
+)
+
+data class PriceInsert(
+    val externalId: StationExternalId,
     val updateId: Long,
-    val updateTimestamp: Instant
+    val updateTimestamp: Instant,
+    val diesel: Double,
+    val e5: Double,
+    val e10: Double
+)
+
+data class ValidPriceInsert(
+    val stationId: StationId,
+    val updateId: Long,
+    val updateTimestamp: Instant,
+    val diesel: Double,
+    val e5: Double,
+    val e10: Double
 )
 
 /**
@@ -49,53 +69,16 @@ data class Longitude(val value: Double)
 fun Double.toLongitude() = Longitude(this)
 
 /**
- * X coordinate
+ * Y coordinate
  */
 data class Latitude(val value: Double)
 fun Double.toLatitude() = Latitude(this)
 
-fun StationUpsert.dieselPrice(stationId: StationId) = Price(
-    stationId,
-    updateId,
-    updateTimestamp,
-    FuelType.DIESEL,
-    priceDiesel
-)
+//data class StationsInAreaGet(
+//    val area: Area
+//)
 
-fun StationUpsert.e10Price(stationId: StationId) = Price(
-    stationId,
-    updateId,
-    updateTimestamp,
-    FuelType.E10,
-    priceE10
-)
-
-fun StationUpsert.e5Price(stationId: StationId) = Price(
-    stationId,
-    updateId,
-    updateTimestamp,
-    FuelType.E5,
-    priceE5
-)
-
-data class StationsInAreaGet(
-    val area: Area
-)
-
-data class Price(
-    val stationId: StationId,
-    val updateId: Long,
-    val updateTimestamp: Instant,
-    val fuelType: FuelType,
-    val price: Double
-)
-
-enum class FuelType {
-    E5, E10, DIESEL
-}
-
-data class StationPriceHistory(
-    val stationId: StationId,
-    val fuelType: FuelType,
-    val priceHistory: List<Price>
-)
+//data class StationPriceHistory(
+//    val stationId: StationId,
+//    val priceHistory: List<Price>
+//)

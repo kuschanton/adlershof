@@ -21,7 +21,7 @@ class TankerkoenigProperties {
         @NotBlank
         lateinit var apiKey: String
 
-//        @Positive
+        // TODO: @Positive
         lateinit var timeout: Duration
 
         @Positive

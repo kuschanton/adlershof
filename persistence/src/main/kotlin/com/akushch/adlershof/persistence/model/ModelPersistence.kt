@@ -1,8 +1,8 @@
 package com.akushch.adlershof.persistence.model
 
-import com.akushch.adlershof.domain.station.FuelType
 import com.akushch.adlershof.domain.station.Price
 import com.akushch.adlershof.domain.station.Station
+import com.akushch.adlershof.domain.station.ValidPriceInsert
 import com.akushch.adlershof.domain.station.stationExternalId
 import com.akushch.adlershof.domain.station.stationId
 import com.akushch.adlershof.domain.station.toLatitude
@@ -18,15 +18,12 @@ data class PriceP(
     val stationId: UUID,
     val updateId: Long,
     val updateTimestamp: Instant,
-    val fuelType: FuelTypeP,
-    val price: Double,
+    val diesel: Double,
+    val e5: Double,
+    val e10: Double,
     @Id
     val id: Long? = null
 )
-
-enum class FuelTypeP {
-    E5, E10, DIESEL
-}
 
 data class StationP(
     val id: UUID,
@@ -35,51 +32,43 @@ data class StationP(
     val brand: String,
     val place: String,
     val street: String,
-    val coordinate: PGpoint,
+    val coordinate: String,
     val houseNumber: String,
     val postCode: Int
 )
 
-fun StationP.toStation() = Station(
-    id = id.stationId(),
-    externalId = externalId.stationExternalId(),
-    name = name,
-    brand = brand,
-    place = place,
-    street = street,
-    lon = coordinate.lon,
-    lat = coordinate.lat,
-    houseNumber = houseNumber,
-    postCode = postCode
-)
+fun StationP.toStation() = with(PGpoint(coordinate)) {
+    Station(
+        id = id.stationId(),
+        externalId = externalId.stationExternalId(),
+        name = name,
+        brand = brand,
+        place = place,
+        street = street,
+        lon = lon,
+        lat = lat,
+        houseNumber = houseNumber,
+        postCode = postCode
+    )
+}
 
 val PGpoint.lon get() = x.toLongitude()
 val PGpoint.lat get() = y.toLatitude()
 
-fun Price.toPriceP() = PriceP(
+fun ValidPriceInsert.toPriceP() = PriceP(
     stationId = stationId.value,
     updateId = updateId,
     updateTimestamp = updateTimestamp,
-    fuelType = fuelType.toFuelTypeP(),
-    price = price
+    diesel = diesel,
+    e5 = e5,
+    e10 = e10
 )
 
 fun PriceP.toPrice() = Price(
     stationId.stationId(),
     updateId = updateId,
     updateTimestamp = updateTimestamp,
-    fuelType = fuelType.toFuelType(),
-    price = price
+    diesel = diesel,
+    e5 = e5,
+    e10 = e10
 )
-
-fun FuelType.toFuelTypeP() = when(this) {
-    FuelType.E5 -> FuelTypeP.E5
-    FuelType.E10 -> FuelTypeP.E10
-    FuelType.DIESEL -> FuelTypeP.DIESEL
-}
-
-fun FuelTypeP.toFuelType() = when(this) {
-    FuelTypeP.E5 -> FuelType.E5
-    FuelTypeP.E10 -> FuelType.E10
-    FuelTypeP.DIESEL -> FuelType.DIESEL
-}

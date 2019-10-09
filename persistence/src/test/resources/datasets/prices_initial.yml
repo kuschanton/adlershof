@@ -2,5 +2,6 @@ price:
   - station_id: 811bb917-644e-48e4-b90f-ca4b521aa388
     update_id: 1565552411
     update_timestamp: 1565552411845
-    fuel_type: DIESEL
-    price: 1.34
+    diesel: 1.31
+    e5: 1.32
+    e10: 1.33
