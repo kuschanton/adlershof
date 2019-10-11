@@ -9,6 +9,11 @@ data class InsertPriceCommand(val data: PriceInsert)
 
 sealed class PriceInsertError {
     data class StationByExternalIdNotFound(val externalId: StationExternalId) : PriceInsertError()
+    data class ExecutionError(val exception: Throwable) : PriceInsertError()
+}
+
+sealed class UpsertStationError {
+    data class ExecutionError(val exception: Throwable) : UpsertStationError()
 }
 
 interface UpsertStationUseCase {

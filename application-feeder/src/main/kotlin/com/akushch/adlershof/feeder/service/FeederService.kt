@@ -1,6 +1,7 @@
 package com.akushch.adlershof.feeder.service
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.effects.ForIO
 import arrow.effects.IO
 import arrow.effects.extensions.io.fx.fx
@@ -22,12 +23,12 @@ import com.akushch.adlershof.domain.station.InsertPriceCommand
 import com.akushch.adlershof.domain.station.InsertPriceUseCase
 import com.akushch.adlershof.domain.station.Price
 import com.akushch.adlershof.domain.station.PriceInsert
-import com.akushch.adlershof.domain.station.ValidPriceInsert
 import com.akushch.adlershof.domain.station.PriceInsertError
 import com.akushch.adlershof.domain.station.Station
 import com.akushch.adlershof.domain.station.StationUpsert
 import com.akushch.adlershof.domain.station.UpsertStation
 import com.akushch.adlershof.domain.station.UpsertStationCommand
+import com.akushch.adlershof.domain.station.UpsertStationError
 import com.akushch.adlershof.domain.station.UpsertStationUseCase
 import com.akushch.adlershof.domain.station.ValidatePriceInsert
 import com.akushch.adlershof.domain.station.ValidatePriceInsertService
@@ -110,6 +111,7 @@ class FeederService(
             val effects = commands
                 .map { it.runUseCase().attempt() }
             coroutineContext.parSequence(effects).bind()
+                .map { it.mapLeft { ex -> UpsertStationError.ExecutionError(ex) } }
         }
 
     @JvmName("executeInsertPriceCommands")
@@ -118,43 +120,39 @@ class FeederService(
             val effects = commands
                 .map { it.runUseCase().attempt() }
             coroutineContext.parSequence(effects).bind()
+                .map { it.foldExceptions { ex -> PriceInsertError.ExecutionError(ex) } }
         }
 
-    private fun List<Either<Throwable, Station>>.logStationsUpsertResult() {
-        val exceptions = this
-            .filterIsInstance<Either.Left<Throwable>>()
+    private fun <E,R> Either<Throwable, Either<E,R>>.foldExceptions(mapper: (Throwable) -> E): Either<E, R> =
+        this.fold(
+            { mapper(it).left() },
+            { it }
+        )
+
+    private fun List<Either<UpsertStationError, Station>>.logStationsUpsertResult() {
+        val errors = this
+            .filterIsInstance<Either.Left<UpsertStationError>>()
             .map { it.a }
-        if (exceptions.isEmpty()) {
+        if (errors.isEmpty()) {
             logger.info("Stations upsert executed successfully, number of stations $size")
         } else {
-            logger.info("Stations upsert executed with errors, total: $size errors: ${exceptions.size}")
-            exceptions.forEach {
-                logger.error("Upsert for a station failed", it)
+            logger.info("Stations upsert executed with errors, total: $size errors: ${errors.size}")
+            errors.forEach {
+                logger.error("Upsert for a station failed: $it")
             }
         }
     }
 
-    private fun List<Either<Throwable, Either<PriceInsertError, Price>>>.logPricesInsertResult() {
-        val exceptions = this
-            .filterIsInstance<Either.Left<Throwable>>()
-            .map { it.a }
+    private fun List<Either<PriceInsertError, Price>>.logPricesInsertResult() {
         val errors = this
-            .filterIsInstance<Either.Right<Either<PriceInsertError, Price>>>()
-            .map { it.b }
             .filterIsInstance<Either.Left<PriceInsertError>>()
             .map { it.a }
-        if (exceptions.isEmpty() && errors.isEmpty()) {
+        if (errors.isEmpty()) {
             logger.info("Price insert executed successfully, number of prices $size")
         } else {
-            logger.info(
-                "Price insert executed with errors and/or exceptions, " +
-                        "total: $size, exceptions: ${exceptions.size} errors: ${errors.size}"
-            )
-            exceptions.forEach {
-                logger.error("Price insert exceptions", it)
-            }
+            logger.info("Price insert executed with errors, total: $size errors: ${errors.size}")
             errors.forEach {
-                logger.error("Price insert error $it")
+                logger.error("Insert for a price failed: $it")
             }
         }
     }
