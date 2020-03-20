@@ -1,7 +1,7 @@
 tankerkoenig:
   api:
     url: https://creativecommons.tankerkoenig.de
-    api-key: ***REMOVED***
+    api-key: ${API_KEY}
     timeout: 30s
     retry-attempts: 3
 
