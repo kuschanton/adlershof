@@ -10,4 +10,6 @@
 !persistence
 !build.gradle.kts
 !gradle.properties
+!repositories.gradle.kts
+!resolutions.gradle.kts
 !settings.gradle.kts
