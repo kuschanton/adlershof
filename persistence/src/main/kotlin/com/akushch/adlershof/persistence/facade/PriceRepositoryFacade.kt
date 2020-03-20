@@ -12,8 +12,7 @@ class PriceRepositoryFacade(
     private val priceRepository: PriceRepository
 ) {
     fun insertPrice(priceInsert: ValidPriceInsert) =
-        priceInsert.let { it.toPriceP() }
-            .let { priceRepository.save(it) }
+            priceRepository.save(priceInsert.toPriceP())
             .map { it.toPrice() }
             .toIO()
 }

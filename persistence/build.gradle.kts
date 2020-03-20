@@ -1,11 +1,12 @@
 buildscript {
     dependencies {
+        // TODO: How to manage version via resolutions?
         classpath("org.postgresql:postgresql:42.2.5")
     }
 }
 
 plugins {
-    id("org.flywaydb.flyway") version "5.2.4"
+    id("org.flywaydb.flyway")
 }
 
 flyway {
@@ -18,18 +19,20 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
 
-    implementation("org.springframework.data:spring-data-r2dbc:1.0.0.M1")
-    implementation("io.r2dbc:r2dbc-postgresql:1.0.0.M7")
-    implementation("org.flywaydb:flyway-core:5.2.4")
-    implementation("org.postgresql:postgresql:42.2.5")
+    implementation("org.springframework.data:spring-data-r2dbc")
+    implementation("io.r2dbc:r2dbc-postgresql")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.postgresql:postgresql")
 
-    implementation("io.projectreactor:reactor-core:3.2.11.RELEASE")
+    implementation("io.projectreactor:reactor-core")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    testCompile("org.testcontainers:junit-jupiter:1.11.3")
-    testCompile("com.github.database-rider:rider-junit5:1.7.2")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("com.github.database-rider:rider-junit5")
 
     // Only to run migration because r2dbc does not work with flyway yet
-    testCompile("org.springframework.boot:spring-boot-starter-jdbc")
+    testImplementation("org.springframework.boot:spring-boot-starter-jdbc")
 }

@@ -31,10 +31,7 @@ class FeederJob(
         ) {
             feederService.updateStations()
                 .unsafeRunAsync { result ->
-                    result.fold(
-                        { logger.error("Update failed", it) },
-                        { it }
-                    )
+                    result.mapLeft { logger.error("Update failed", it) }
                 }
         }
     }

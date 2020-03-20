@@ -1,0 +1,28 @@
+station:
+    - id: 51d4b6a9-a095-1aa0-e100-80009459e031
+      external_id: 51d4b6a9-a095-1aa0-e100-80009459e031
+      name: ELAN
+      brand: ELAN
+      place: BERLIN
+      street: PRENZLAUER ALLEE
+      coordinate: (1322222,5211111)
+      house_number: 1-4
+      post_code: 10405
+    - id: 474e5046-deaf-4f9b-9a32-9797b778f041
+      external_id: 51d4b6a9-a095-1aa0-e100-80009459e032
+      name: TOTAL
+      brand: TOTAL
+      place: BERLIN
+      street: STORKOWER STR.
+      coordinate: (1344444,5233333)
+      house_number: 174
+      post_code: 10369
+    - id: ffbd84db-0b45-4236-8382-889b63ab2941
+      external_id: 51d4b6a9-a095-1aa0-e100-80009459e033
+      name: ARAL
+      brand: ARAL
+      place: BERLIN
+      street: ELDENAER STR.
+      coordinate: (1311111,522222)
+      house_number: 33
+      post_code: 10247

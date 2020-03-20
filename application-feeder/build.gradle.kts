@@ -1,6 +1,6 @@
 
 plugins {
-    id("org.springframework.boot") version "2.1.6.RELEASE"
+    id("org.springframework.boot")
 }
 
 dependencies {
@@ -8,9 +8,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":persistence"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.flywaydb:flyway-core:5.2.4")
+    implementation("org.flywaydb:flyway-core")
 }
 

@@ -8,8 +8,6 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import java.time.Duration
-import javax.annotation.PostConstruct
 
 @Component
 class TankerkoenigClient(

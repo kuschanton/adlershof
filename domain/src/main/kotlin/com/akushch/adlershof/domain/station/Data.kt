@@ -1,6 +1,5 @@
 package com.akushch.adlershof.domain.station
 
-import com.akushch.adlershof.domain.subscription.Area
 import java.time.Instant
 import java.util.UUID
 
@@ -17,8 +16,7 @@ data class Station(
     val brand: String,
     val place: String,
     val street: String,
-    val lon: Longitude,
-    val lat: Latitude,
+    val coordinate: Coordinate,
     val houseNumber: String,
     val postCode: Int
 )
@@ -38,8 +36,19 @@ data class StationUpsert(
     val brand: String,
     val place: String,
     val street: String,
-    val lon: Longitude,
-    val lat: Latitude,
+    val lon: Double,
+    val lat: Double,
+    val houseNumber: String,
+    val postCode: Int
+)
+
+data class ValidStationInsert(
+    val externalId: StationExternalId,
+    val name: String,
+    val brand: String,
+    val place: String,
+    val street: String,
+    val coordinate: Coordinate,
     val houseNumber: String,
     val postCode: Int
 )
@@ -74,11 +83,4 @@ fun Double.toLongitude() = Longitude(this)
 data class Latitude(val value: Double)
 fun Double.toLatitude() = Latitude(this)
 
-//data class StationsInAreaGet(
-//    val area: Area
-//)
-
-//data class StationPriceHistory(
-//    val stationId: StationId,
-//    val priceHistory: List<Price>
-//)
+data class Coordinate(val xLongitude: Longitude, val yLatitude: Latitude)

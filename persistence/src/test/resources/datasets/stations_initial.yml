@@ -1,19 +1,19 @@
 station:
-    - id: 579d25fd-acb9-445a-9494-f7fe0fa7ce4a
-      external_id: 51d4b6a9-a095-1aa0-e100-80009459e03a
-      name: ELAN
-      brand: ELAN
-      place: BERLIN
-      street: PRENZLAUER ALLEE
-      coordinate: (52.11111,13.22222)
-      house_number: 1-4
-      post_code: 10405
-    - id: 4429a7d9-fb2d-4c29-8cfe-2ca90323f9f8
-      external_id: 474e5046-deaf-4f9b-9a32-9797b778f047
-      name: TOTAL
-      brand: TOTAL
-      place: BERLIN
-      street: STORKOWER STR.
-      coordinate: (52.33333,13.44444)
-      house_number: 174
-      post_code: 10369
+  - id: 51d4b6a9-a095-1aa0-e100-80009459e031
+    external_id: 51d4b6a9-a095-1aa0-e100-80009459e031
+    name: ELAN
+    brand: ELAN
+    place: BERLIN
+    street: PRENZLAUER ALLEE
+    coordinate: (1322222,5211111)
+    house_number: 1-4
+    post_code: 10405
+  - id: 474e5046-deaf-4f9b-9a32-9797b778f041
+    external_id: 51d4b6a9-a095-1aa0-e100-80009459e032
+    name: TOTAL
+    brand: TOTAL
+    place: BERLIN
+    street: STORKOWER STR.
+    coordinate: (1344444,5233333)
+    house_number: 174
+    post_code: 10369

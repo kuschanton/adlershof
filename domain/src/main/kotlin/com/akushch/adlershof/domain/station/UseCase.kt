@@ -1,28 +1,38 @@
 package com.akushch.adlershof.domain.station
 
+import arrow.core.Either
+import arrow.core.right
+import arrow.effects.IO
 import arrow.effects.extensions.io.fx.fx
-import com.akushch.adlershof.common.getOrElse
 
 data class UpsertStationCommand(val data: StationUpsert)
 data class InsertPriceCommand(val data: PriceInsert)
-//data class GetStationsInAreaCommand(val data: StationsInAreaGet)
 
 sealed class PriceInsertError {
     data class StationByExternalIdNotFound(val externalId: StationExternalId) : PriceInsertError()
     data class ExecutionError(val exception: Throwable) : PriceInsertError()
 }
 
-sealed class UpsertStationError {
-    data class ExecutionError(val exception: Throwable) : UpsertStationError()
+sealed class StationUpsertError {
+    data class InvalidCoordinateError(val message: String) : StationUpsertError()
+    data class ExecutionUpsertError(val exception: Throwable) : StationUpsertError()
 }
 
 interface UpsertStationUseCase {
-    val upsertStation: UpsertStation
+    val insertStation: InsertStation
     val findByExternalId: FindByExternalId
+    val validateStationInsert: ValidateStationInsert
 
-    fun UpsertStationCommand.runUseCase() = fx {
-        findByExternalId(data.externalId).bind()
-            .getOrElse { upsertStation(data).bind() }
+    fun UpsertStationCommand.runUseCase(): IO<Either<StationUpsertError, Station>> = fx {
+        findByExternalId(data.externalId).bind().fold(
+            {
+                validateStationInsert(data)
+                    .map {
+                        insertStation(it).bind()
+                    }
+            },
+            { it.right() }
+        )
     }
 }
 
@@ -30,16 +40,9 @@ interface InsertPriceUseCase {
     val validateInsert: ValidatePriceInsert
     val insertPrice: InsertPrice
 
-    fun InsertPriceCommand.runUseCase() = fx {
+    fun InsertPriceCommand.runUseCase(): IO<Either<PriceInsertError, Price>> = fx {
         validateInsert(data).bind()
             .map { insertPrice(it).bind() }
     }
 }
-
-//interface GetStationsInAreaUseCase {
-//    val getStationsInArea: GetStationsInArea
-//    fun GetStationsInAreaCommand.runUseCase(): IO<List<Station>> = getStationsInArea(data.area)
-//}
-
-
 

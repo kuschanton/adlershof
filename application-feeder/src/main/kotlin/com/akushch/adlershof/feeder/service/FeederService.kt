@@ -6,41 +6,41 @@ import arrow.effects.ForIO
 import arrow.effects.IO
 import arrow.effects.extensions.io.fx.fx
 import arrow.effects.typeclasses.ConcurrentCancellableContinuation
-import com.akushch.adlershof.domain.station.InsertPrice
-import com.akushch.adlershof.feeder.client.TankerkoenigClient
-import com.akushch.adlershof.feeder.config.AreaProperties
-import com.akushch.adlershof.feeder.config.CoroutinesProperties
-import com.akushch.adlershof.feeder.model.AreaApi
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.asCoroutineDispatcher
-import org.apache.logging.log4j.LogManager
-import org.springframework.stereotype.Component
-import java.util.concurrent.Executors
-import kotlin.coroutines.CoroutineContext
 import com.akushch.adlershof.domain.station.FindByExternalId
+import com.akushch.adlershof.domain.station.InsertPrice
 import com.akushch.adlershof.domain.station.InsertPriceCommand
 import com.akushch.adlershof.domain.station.InsertPriceUseCase
+import com.akushch.adlershof.domain.station.InsertStation
 import com.akushch.adlershof.domain.station.Price
 import com.akushch.adlershof.domain.station.PriceInsert
 import com.akushch.adlershof.domain.station.PriceInsertError
 import com.akushch.adlershof.domain.station.Station
 import com.akushch.adlershof.domain.station.StationUpsert
-import com.akushch.adlershof.domain.station.UpsertStation
+import com.akushch.adlershof.domain.station.StationUpsertError
 import com.akushch.adlershof.domain.station.UpsertStationCommand
-import com.akushch.adlershof.domain.station.UpsertStationError
 import com.akushch.adlershof.domain.station.UpsertStationUseCase
 import com.akushch.adlershof.domain.station.ValidatePriceInsert
 import com.akushch.adlershof.domain.station.ValidatePriceInsertService
+import com.akushch.adlershof.domain.station.ValidateStationInsert
+import com.akushch.adlershof.domain.station.ValidateStationInsertService
 import com.akushch.adlershof.domain.station.stationExternalId
-import com.akushch.adlershof.domain.station.stationId
 import com.akushch.adlershof.domain.station.toLatitude
 import com.akushch.adlershof.domain.station.toLongitude
+import com.akushch.adlershof.feeder.client.TankerkoenigClient
+import com.akushch.adlershof.feeder.config.AreaProperties
+import com.akushch.adlershof.feeder.config.CoroutinesProperties
+import com.akushch.adlershof.feeder.model.AreaApi
 import com.akushch.adlershof.feeder.model.StationApi
 import com.akushch.adlershof.persistence.facade.PriceRepositoryFacade
 import com.akushch.adlershof.persistence.facade.StationRepositoryFacade
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
+import org.apache.logging.log4j.LogManager
+import org.springframework.stereotype.Component
 import java.time.Instant
-import java.util.UUID
+import java.util.concurrent.Executors
+import kotlin.coroutines.CoroutineContext
 
 @Component
 class FeederService(
@@ -62,28 +62,10 @@ class FeederService(
 
     private val coroutineContext: CoroutineContext = dispatcher + SupervisorJob() + handler
 
-    // TODO: Remove this
-    private val dummyFunction: UpsertStation = { x ->
-        fx {
-            logger.info("Upsert station $x")
-            com.akushch.adlershof.domain.station.Station(
-                id = UUID.randomUUID().stationId(),
-                street = x.street,
-                postCode = x.postCode,
-                place = x.place,
-                lat = x.lat,
-                lon = x.lon,
-                houseNumber = x.houseNumber,
-                externalId = x.externalId,
-                brand = x.brand,
-                name = x.name
-            )
-        }
-    }
-
     private val upsertStationUseCase = object : UpsertStationUseCase {
         override val findByExternalId: FindByExternalId = stationRepositoryFacade::findByExternalId
-        override val upsertStation: UpsertStation = dummyFunction
+        override val insertStation: InsertStation = stationRepositoryFacade::insertStation
+        override val validateStationInsert: ValidateStationInsert = { ValidateStationInsertService().run { it.validate() } }
     }
 
     private val insertPriceUseCase = object : InsertPriceUseCase {
@@ -111,7 +93,7 @@ class FeederService(
             val effects = commands
                 .map { it.runUseCase().attempt() }
             coroutineContext.parSequence(effects).bind()
-                .map { it.mapLeft { ex -> UpsertStationError.ExecutionError(ex) } }
+                .map { it.foldExceptions { ex -> StationUpsertError.ExecutionUpsertError(ex) } }
         }
 
     @JvmName("executeInsertPriceCommands")
@@ -129,9 +111,9 @@ class FeederService(
             { it }
         )
 
-    private fun List<Either<UpsertStationError, Station>>.logStationsUpsertResult() {
+    private fun List<Either<StationUpsertError, Station>>.logStationsUpsertResult() {
         val errors = this
-            .filterIsInstance<Either.Left<UpsertStationError>>()
+            .filterIsInstance<Either.Left<StationUpsertError>>()
             .map { it.a }
         if (errors.isEmpty()) {
             logger.info("Stations upsert executed successfully, number of stations $size")
@@ -183,8 +165,8 @@ class FeederService(
                 name = name,
                 brand = brand,
                 houseNumber = houseNumber,
-                lon = lng.toLongitude(),
-                lat = lat.toLatitude(),
+                lon = lng,
+                lat = lat,
                 place = place,
                 postCode = postCode,
                 street = street

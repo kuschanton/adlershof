@@ -1,5 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE station (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     created TIMESTAMPTZ NOT NULL,
     updated TIMESTAMPTZ NOT NULL,
     external_id UUID UNIQUE NOT NULL,
