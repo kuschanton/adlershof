@@ -22,4 +22,20 @@ class DatabaseProperties {
 
     @NotBlank
     lateinit var password: String
+
+    companion object {
+        fun build (
+            host: String,
+            port: Int,
+            database: String,
+            username: String,
+            password: String
+        ): DatabaseProperties = DatabaseProperties().also {
+            it.host = host
+            it.port = port
+            it.database = database
+            it.username = username
+            it.password = password
+        }
+    }
 }
