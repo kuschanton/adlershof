@@ -9,6 +9,7 @@ Next steps:
 - [ ] No exceptions
 - [x] Finish persistence
 - [x] Cover persistence with tests
+- [ ] Test containers starter (https://github.com/testcontainers/testcontainers-spring-boot)
 - [ ] Cleanup persistence
 - [ ] Make feeder work with persistence
 - [ ] Cover feeder with tests
