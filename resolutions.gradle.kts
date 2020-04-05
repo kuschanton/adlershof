@@ -1,6 +1,6 @@
 var kotlinVersion = "1.3.70"
 var coroutinesVersion = "1.3.4"
-var springBootVersion = "2.2.5.RELEASE"
+var springBootVersion = "2.2.6.RELEASE"
 var arrowVersion = "0.9.0"
 var striktVersion = "0.24.0"
 var junitVersion = "5.5.1"

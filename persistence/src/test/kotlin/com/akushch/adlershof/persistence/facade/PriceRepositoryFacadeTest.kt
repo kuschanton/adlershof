@@ -3,6 +3,7 @@ package com.akushch.adlershof.persistence.facade
 import com.akushch.adlershof.domain.station.Price
 import com.akushch.adlershof.domain.station.ValidPriceInsert
 import com.akushch.adlershof.domain.station.stationId
+import com.akushch.adlershof.persistence.PersistenceBaseTest
 import com.akushch.adlershof.persistence.PersistenceTest
 import com.github.database.rider.core.api.connection.ConnectionHolder
 import com.github.database.rider.core.api.dataset.DataSet
@@ -12,11 +13,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.test.annotation.DirtiesContext
 import java.time.Instant
 import java.util.UUID
 
 @PersistenceTest
-class PriceRepositoryFacadeTest {
+class PriceRepositoryFacadeTest : PersistenceBaseTest() {
 
     @Autowired
     private lateinit var priceRepositoryFacade: PriceRepositoryFacade

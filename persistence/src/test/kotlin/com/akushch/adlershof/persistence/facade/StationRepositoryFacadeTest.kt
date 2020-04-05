@@ -5,6 +5,7 @@ import com.akushch.adlershof.domain.station.ValidStationInsert
 import com.akushch.adlershof.domain.station.stationExternalId
 import com.akushch.adlershof.domain.station.toLatitude
 import com.akushch.adlershof.domain.station.toLongitude
+import com.akushch.adlershof.persistence.PersistenceBaseTest
 import com.akushch.adlershof.persistence.PersistenceTest
 import com.github.database.rider.core.api.connection.ConnectionHolder
 import com.github.database.rider.core.api.dataset.DataSet
@@ -12,13 +13,14 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.annotation.DirtiesContext
 import strikt.api.expectThat
 import strikt.arrow.isSome
 import strikt.assertions.isEqualTo
 import java.util.UUID
 
 @PersistenceTest
-class StationRepositoryFacadeTest {
+class StationRepositoryFacadeTest : PersistenceBaseTest() {
 
     @Autowired
     private lateinit var stationRepositoryFacade: StationRepositoryFacade

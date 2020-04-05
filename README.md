@@ -9,6 +9,7 @@ Next steps:
 - [ ] No exceptions
 - [x] Finish persistence
 - [x] Cover persistence with tests
+- [x] @DynamicPropertySource in persistence tests
 - [ ] Cleanup persistence
 - [ ] Make feeder work with persistence
 - [ ] Cover feeder with tests

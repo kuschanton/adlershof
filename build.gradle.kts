@@ -14,11 +14,6 @@ allprojects {
     apply(plugin = "kotlin-kapt")
     apply(plugin = "kotlin-spring")
 
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
@@ -34,7 +29,7 @@ allprojects {
 
     dependencies {
         // Spring
-        implementation(platform("org.springframework.boot:spring-boot-dependencies:2.2.5.RELEASE"))
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:2.2.6.RELEASE"))
         implementation("org.springframework.boot:spring-boot-starter-validation")
 
         // Arrow
